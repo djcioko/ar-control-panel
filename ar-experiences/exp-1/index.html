@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiență 1</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    .info {
+      position: fixed; top: 12px; left: 12px; right: 12px;
+      background: rgba(0,0,0,0.6); color: #fff; padding: 10px 14px;
+      border-radius: 8px; font-family: system-ui, sans-serif; font-size: 14px;
+      z-index: 10; text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="info">Îndreaptă camera spre poza printată — Experiență 1</div>
+  <a-scene
+    mindar-image="imageTargetSrc: ./targets.mind; autoStart: true;"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false"
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+  >
+    <a-assets>
+      <video id="vid" src="./video.mp4" loop crossorigin="anonymous" playsinline></video>
+    </a-assets>
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    <a-entity mindar-image-target="targetIndex: 0">
+      <a-video
+        src="#vid"
+        position="0 0 0"
+        width="1"
+        height="0.5625"
+        rotation="0 0 0"
+      ></a-video>
+    </a-entity>
+  </a-scene>
+  <script>
+    const video = document.querySelector("#vid");
+    document.addEventListener("DOMContentLoaded", () => {
+      const scene = document.querySelector("a-scene");
+      scene.addEventListener("targetFound", () => {
+        video.play().catch(() => {});
+      });
+      scene.addEventListener("targetLost", () => {
+        video.pause();
+      });
+    });
+  </script>
+</body>
+</html>

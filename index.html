@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AR Control Panel</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- QR Code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <!-- JSZip for export -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <!-- FileSaver -->
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">AR</span>
+        <div>
+          <h1>Control Panel</h1>
+          <p class="subtitle">Gestionează experiențele AR</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btnExport" class="btn btn-primary" disabled>
+          Exportă tot
+        </button>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main">
+      <!-- Left: Experiences list -->
+      <section class="panel experiences-panel">
+        <div class="panel-header">
+          <h2>Experiențe <span id="expCount" class="badge">0/10</span></h2>
+          <button id="btnAddExp" class="btn btn-sm btn-accent" disabled title="Adaugă o experiență nouă">
+            + Adaugă
+          </button>
+        </div>
+
+        <div id="experiencesList" class="experiences-list">
+          <div class="empty-state" id="emptyState">
+            <p>Nicio experiență încă.</p>
+            <p class="hint">Încarcă mai întâi poze și video-uri în dreapta, apoi apasă „+ Adaugă”.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Assets + Editor -->
+      <section class="panel assets-panel">
+        <div class="tabs">
+          <button class="tab active" data-tab="assets">Asset-uri</button>
+          <button class="tab" data-tab="editor">Editor</button>
+        </div>
+
+        <!-- Tab: Assets -->
+        <div id="tabAssets" class="tab-content active">
+          <div class="upload-section">
+            <h3>Poze (target)</h3>
+            <div class="upload-zone" id="photoZone">
+              <input type="file" id="photoInput" accept="image/*" multiple hidden />
+              <div class="upload-placeholder">
+                <span>📷</span>
+                <p>Trage pozele aici sau apasă</p>
+                <small>Max 10 poze • PNG / JPG</small>
+              </div>
+            </div>
+            <div id="photoList" class="asset-grid"></div>
+          </div>
+
+          <div class="upload-section">
+            <h3>Video-uri</h3>
+            <div class="upload-zone" id="videoZone">
+              <input type="file" id="videoInput" accept="video/*" multiple hidden />
+              <div class="upload-placeholder">
+                <span>🎬</span>
+                <p>Trage video-urile aici sau apasă</p>
+                <small>Max 10 video-uri • MP4 recomandat</small>
+              </div>
+            </div>
+            <div id="videoList" class="asset-grid"></div>
+          </div>
+        </div>
+
+        <!-- Tab: Editor -->
+        <div id="tabEditor" class="tab-content">
+          <div id="editorEmpty" class="empty-state">
+            <p>Selectează o experiență din listă pentru a o edita.</p>
+          </div>
+
+          <div id="editorForm" class="editor-form" style="display:none;">
+            <div class="form-group">
+              <label>Nume experiență</label>
+              <input type="text" id="expName" placeholder="ex: Nuntă Maria & Ion" maxlength="40" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Număr</label>
+                <input type="number" id="expNumber" min="1" max="10" />
+              </div>
+              <div class="form-group">
+                <label>Culoare</label>
+                <input type="color" id="expColor" value="#6366f1" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Poză (target)</label>
+              <select id="expPhoto"></select>
+            </div>
+
+            <div class="form-group">
+              <label>Video</label>
+              <select id="expVideo"></select>
+            </div>
+
+            <div class="form-actions">
+              <button id="btnSaveExp" class="btn btn-primary">Salvează</button>
+              <button id="btnDeleteExp" class="btn btn-danger">Șterge</button>
+            </div>
+
+            <div class="qr-section">
+              <h4>QR Code</h4>
+              <div id="qrPreview" class="qr-preview"></div>
+              <button id="btnDownloadQR" class="btn btn-sm">Descarcă QR</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Status bar -->
+    <footer class="status-bar">
+      <span id="statusText">Gata</span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
